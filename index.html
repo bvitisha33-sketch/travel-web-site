@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MV TRAVELS | Next-Gen Luxury Travel</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Poppins:wght@300;400;600;800&family=Montserrat:wght@900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+
+    <style>
+        :root {
+            --primary: #0072ff;
+            --secondary: #00c6ff;
+            --dark: #0a0e17;
+            --gold: #ffcc00;
+            --red: #ff4b2b;
+            --glass: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        body { 
+            background: #f4f7f9; 
+            overflow-x: hidden; 
+            background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://www.transparenttextures.com/patterns/cubes.png');
+        }
+
+        /* 3D MV TRAVELS BACKGROUND TEXT */
+        body::before {
+            content: "MV TRAVELS";
+            position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-30deg);
+            font-size: 15vw; font-weight: 900; color: rgba(0, 0, 0, 0.03); z-index: -1;
+            white-space: nowrap; font-family: 'Montserrat';
+        }
+
+        /* --- HEADER & 3D LOGO --- */
+        header {
+            background: #fff; padding: 15px 5%; display: flex; justify-content: space-between;
+            align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            position: sticky; top: 0; z-index: 1000;
+        }
+
+        .logo-3d {
+            font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 900;
+            background: linear-gradient(45deg, #001f3f, #0072ff); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; text-shadow: 3px 3px 5px rgba(0,0,0,0.1);
+            cursor: pointer;
+        }
+
+        .login-btn {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: #fff; padding: 10px 25px; border-radius: 30px; border: none;
+            font-weight: 700; cursor: pointer; box-shadow: 0 5px 15px rgba(0,114,255,0.3);
+        }
+
+        /* --- SIDE MENU --- */
+        .side-menu {
+            position: fixed; left: -300px; top: 0; width: 300px; height: 100%;
+            background: var(--dark); color: #fff; z-index: 2000; transition: 0.5s;
+            padding: 60px 30px; box-shadow: 10px 0 40px rgba(0,0,0,0.5);
+        }
+        .side-menu.active { left: 0; }
+        .menu-item { 
+            padding: 15px 0; border-bottom: 1px solid #222; cursor: pointer;
+            display: flex; align-items: center; gap: 15px; font-size: 18px; transition: 0.3s;
+        }
+        .menu-item:hover { color: var(--secondary); transform: translateX(10px); }
+
+        /* --- MAIN CONTENT --- */
+        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px 100px 20px; }
+        .page { display: none; }
+        .page.active { display: block; animation: zoomIn 0.5s; }
+
+        /* --- SEARCH & 3D CARDS --- */
+        .search-section { text-align: center; margin-bottom: 40px; }
+        .search-bar {
+            width: 100%; max-width: 600px; padding: 18px 30px; border-radius: 50px;
+            border: none; box-shadow: 0 10px 40px rgba(0,0,0,0.1); outline: none; font-size: 16px;
+        }
+
+        .grid-3d { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 30px; }
+        .card-3d {
+            background: #fff; border-radius: 20px; overflow: hidden;
+            transform-style: preserve-3d; transition: 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer;
+        }
+        .card-3d:hover { transform: rotateY(10deg) rotateX(5deg) translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+        .card-img { height: 200px; width: 100%; object-fit: cover; }
+        .card-info { padding: 20px; }
+        .card-info h3 { font-weight: 800; color: var(--dark); }
+
+        /* --- PASSENGER FORM (REALISTIC) --- */
+        .booking-form {
+            max-width: 700px; margin: auto; background: #fff; padding: 40px;
+            border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+        }
+        .input-group { margin-bottom: 25px; }
+        .input-group label { display: block; font-weight: 700; font-size: 12px; color: #777; margin-bottom: 8px; text-transform: uppercase; }
+        .input-group input, .input-group select {
+            width: 100%; padding: 15px; border: 2px solid #eee; border-radius: 12px;
+            font-size: 15px; outline: none; transition: 0.3s;
+        }
+        .input-group input:focus { border-color: var(--primary); }
+        .blur-name::placeholder { color: transparent; text-shadow: 0 0 8px rgba(0,0,0,0.5); }
+
+        /* --- 3D MEMBERS SELECTOR --- */
+        .members-3d {
+            display: flex; gap: 15px; justify-content: space-around;
+            perspective: 1000px; margin: 20px 0;
+        }
+        .mem-box {
+            flex: 1; padding: 20px; background: #f9f9f9; border-radius: 15px;
+            text-align: center; border: 2px solid #eee; cursor: pointer; transition: 0.4s;
+        }
+        .mem-box.selected { background: var(--primary); color: #fff; transform: translateZ(30px); border-color: var(--primary); }
+
+        /* --- LOGIN POPUP --- */
+        .modal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8); display: none; align-items: center; justify-content: center; z-index: 3000;
+        }
+        .modal-content {
+            background: #fff; padding: 40px; border-radius: 25px; width: 90%; max-width: 400px;
+            position: relative; animation: slideInUp 0.4s;
+        }
+
+        /* --- WALLET --- */
+        .wallet-card {
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            width: 100%; max-width: 350px; height: 200px; border-radius: 20px;
+            padding: 30px; color: #fff; margin: 20px auto; position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        /* --- 3D TICKET --- */
+        .ticket-3d {
+            background: #fff; border-radius: 20px; padding: 40px; max-width: 600px;
+            margin: auto; box-shadow: 20px 20px 60px #bebebe, -20px -20px 60px #ffffff;
+            border-left: 15px solid var(--primary);
+        }
+        .ticket-header { border-bottom: 2px dashed #eee; padding-bottom: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; }
+
+        /* --- FOOD SECTION --- */
+        .food-filter { display: flex; gap: 10px; overflow-x: auto; padding: 20px 0; margin-bottom: 20px; }
+        .filter-btn { padding: 8px 20px; border-radius: 20px; border: 1px solid #ddd; background: #fff; cursor: pointer; white-space: nowrap; }
+        .filter-btn.active { background: var(--primary); color: #fff; }
+
+        /* --- BOTTOM NAV --- */
+        .bottom-nav {
+            position: fixed; bottom: 0; width: 100%; background: #fff;
+            display: flex; justify-content: space-around; padding: 15px;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.05); z-index: 1000;
+        }
+        .nav-item { text-align: center; color: #bbb; cursor: pointer; font-size: 11px; font-weight: 700; }
+        .nav-item.active { color: var(--primary); }
+        .nav-item i { font-size: 22px; display: block; margin-bottom: 5px; }
+
+        .btn-block { width: 100%; padding: 15px; border-radius: 12px; border: none; font-weight: 800; cursor: pointer; margin-top: 10px; font-size: 16px; }
+        .btn-main { background: var(--primary); color: #fff; }
+        .btn-outline { background: #fff; color: var(--red); border: 2px solid var(--red); }
+
+        /* SUCCESS ANIMATION */
+        #successAnim {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(255,255,255,0.9); z-index: 5000; display: none;
+            flex-direction: column; align-items: center; justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+            .grid-3d { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body onkeydown="handleEnter(event)">
+
+    <div id="sideMenu" class="side-menu">
+        <i class="fa-solid fa-xmark" style="position: absolute; top: 20px; right: 20px; font-size: 24px; cursor: pointer;" onclick="toggleMenu()"></i>
+        <h2 style="margin-bottom: 30px; font-family: Orbitron;">MV MENU</h2>
+        <div class="menu-item" onclick="showPage('homePage')"><i class="fa-solid fa-house"></i> Home</div>
+        <div class="menu-item" onclick="showPage('foodPage')"><i class="fa-solid fa-utensils"></i> Food Court</div>
+        <div class="menu-item" onclick="showPage('walletPage')"><i class="fa-solid fa-wallet"></i> MV Wallet</div>
+        <div class="menu-item" onclick="alert('Help: +91 98765 43210')"><i class="fa-solid fa-headset"></i> Customer Care</div>
+        <div class="menu-item" onclick="location.reload()"><i class="fa-solid fa-right-from-bracket"></i> Logout</div>
+    </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Login</h2>
+            <p id="modalSub" style="font-size: 12px; color: #777; margin-bottom: 20px;">Enter your details to continue</p>
+            <div class="input-group">
+                <label>Email or Phone</label>
+                <input type="text" id="loginId" placeholder="example@mail.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="loginPass" placeholder="••••••••">
+            </div>
+            <button class="btn-block btn-main" onclick="handleLogin()">Continue</button>
+            <p id="toggleText" style="text-align: center; margin-top: 15px; font-size: 13px; cursor: pointer; color: var(--primary);" onclick="toggleLoginMode()">Create a new account</p>
+            <i class="fa-solid fa-circle-xmark" style="position: absolute; top: 15px; right: 15px; cursor: pointer;" onclick="closeLogin()"></i>
+        </div>
+    </div>
+
+    <div id="successAnim">
+        <div class="animate__animated animate__bounceInDown" style="font-size: 80px; color: #4cd137;"><i class="fa-solid fa-circle-check"></i></div>
+        <h1 class="animate__animated animate__fadeInUp">Congratulations!</h1>
+        <p class="animate__animated animate__fadeInUp" style="color: #666;">Your Luxury Trip is Confirmed!</p>
+    </div>
+
+    <header>
+        <div style="display: flex; align-items: center; gap: 20px;">
+            <i class="fa-solid fa-bars-staggered" style="font-size: 24px; cursor: pointer;" onclick="toggleMenu()"></i>
+            <div class="logo-3d" onclick="showPage('homePage')">MV TRAVELS</div>
+        </div>
+        <button class="login-btn" onclick="openLogin()">Login</button>
+    </header>
+
+    <div class="container">
+        
+        <div id="homePage" class="page active">
+            <div class="search-section">
+                <input type="text" class="search-bar" placeholder="Search 15+ Most Popular Places..." onkeyup="searchPlaces(this.value)">
+            </div>
+            <div class="grid-3d" id="destGrid"></div>
+            
+            <h2 style="margin: 40px 0 20px; font-weight: 800;">Exclusive Offers</h2>
+            <div style="display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px;">
+                <div style="min-width: 300px; height: 150px; background: linear-gradient(45deg, #ff9a9e, #fad0c4); border-radius: 20px; padding: 25px; color: #fff;">
+                    <h3>FLAT 50% OFF</h3>
+                    <p>On Maldives Booking</p>
+                    <p style="font-size: 10px; margin-top: 10px;">Use Code: MV50</p>
+                </div>
+                <div style="min-width: 300px; height: 150px; background: linear-gradient(45deg, #a1c4fd, #c2e9fb); border-radius: 20px; padding: 25px; color: #fff;">
+                    <h3>FREE DINNER</h3>
+                    <p>In Paris Luxury Hotels</p>
+                    <p style="font-size: 10px; margin-top: 10px;">Valid for Couples</p>
+                </div>
+            </div>
+        </div>
+
+        <div id="foodPage" class="page">
+            <h2 style="font-weight: 800;">MV Global Kitchen</h2>
+            <div class="food-filter" id="foodFilters">
+                <button class="filter-btn active" onclick="filterFood('All')">All</button>
+                <button class="filter-btn" onclick="filterFood('Indian')">Indian</button>
+                <button class="filter-btn" onclick="filterFood('Italian')">Italian</button>
+                <button class="filter-btn" onclick="filterFood('Chinese')">Chinese</button>
+                <button class="filter-btn" onclick="filterFood('USA')">Western</button>
+            </div>
+            <div class="grid-3d" id="foodGrid"></div>
+        </div>
+
+        <div id="walletPage" class="page" style="text-align: center;">
+            <h2 style="font-weight: 800;">MV Secure Wallet</h2>
+            <div class="wallet-card">
+                <p style="font-size: 12px; opacity: 0.8;">CURRENT BALANCE</p>
+                <h1 style="font-size: 36px; margin: 10px 0;">₹ 12,500.00</h1>
+                <p style="letter-spacing: 3px; margin-top: 20px;">**** **** **** 4421</p>
+                <div style="display: flex; justify-content: space-between; margin-top: 15px;">
+                    <span style="font-size: 12px;">SUNIL MV</span>
+                    <i class="fa-brands fa-cc-visa fa-2xl"></i>
+                </div>
+            </div>
+            <button class="btn-block btn-main" style="max-width: 350px;">+ Add Money</button>
+        </div>
+
+        <div id="bookingPage" class="page">
+            <div class="booking-form">
+                <h2 style="margin-bottom: 25px; font-weight: 800; border-bottom: 3px solid var(--primary); display: inline-block;">Passenger Details</h2>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group">
+                        <label>Title</label>
+                        <select id="pTitle"><option>Mr.</option><option>Mrs.</option><option>Ms.</option></select>
+                    </div>
+                    <div class="input-group">
+                        <label>Gender</label>
+                        <select id="pGender"><option>Male</option><option>Female</option><option>Transgender</option></select>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" class="blur-name" id="pName" placeholder="Sunil" value="Sunil">
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="input-group">
+                        <label>Departure Date</label>
+                        <input type="date" id="pDate">
+                    </div>
+                    <div class="input-group">
+                        <label>Class Type</label>
+                        <select id="pClass">
+                            <option>MV Royal Elite</option>
+                            <option>Business Sky</option>
+                            <option>First Class Diamond</option>
+                            <option>Executive Premium</option>
+                        </select>
+                    </div>
+                </div>
+
+                <label style="font-size: 12px; font-weight: 700; color: #777;">SELECT MEMBERS</label>
+                <div class="members-3d">
+                    <div class="mem-box selected" onclick="selectMem(this, 1)">1</div>
+                    <div class="mem-box" onclick="selectMem(this, 2)">2</div>
+                    <div class="mem-box" onclick="selectMem(this, 3)">3</div>
+                    <div class="mem-box" onclick="selectMem(this, 4)">4+</div>
+                </div>
+
+                <div class="input-group">
+                    <label>Mobile Number (All Countries)</label>
+                    <input type="tel" id="pPhone">
+                </div>
+
+                <button class="btn-block btn-main" onclick="processBooking()">Book Now</button>
+            </div>
+        </div>
+
+        <div id="ticketPage" class="page">
+            <div class="ticket-3d" id="printableTicket">
+                <div class="ticket-header">
+                    <div>
+                        <h2 style="font-family: Orbitron; color: var(--primary);">MV TRAVELS</h2>
+                        <p style="font-size: 10px; font-weight: 800;">OFFICIAL BOARDING PASS</p>
+                    </div>
+                    <div style="text-align: right;">
+                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=60x60&data=MV-CONFIRMED" alt="QR">
+                    </div>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+                    <div><p style="font-size: 10px; color: #999;">PASSENGER NAME</p><h3 id="tName">SUNIL</h3></div>
+                    <div><p style="font-size: 10px; color: #999;">DESTINATION</p><h3 id="tDest">PARIS</h3></div>
+                    <div><p style="font-size: 10px; color: #999;">TRAVEL DATE</p><h3 id="tDate">22/03/2026</h3></div>
+                    <div><p style="font-size: 10px; color: #999;">SEAT CLASS</p><h3 id="tClass">ROYAL</h3></div>
+                </div>
+
+                <div style="border-top: 1px solid #eee; padding-top: 20px; font-size: 12px; color: #666;">
+                    <p><b>Support:</b> +91 98765 43210 | support@mvtravels.com</p>
+                    <p><b>Address:</b> MV Tower, Sky Enclave, Chennai, India.</p>
+                </div>
+            </div>
+
+            <div style="max-width: 600px; margin: 30px auto; display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <button class="btn-block btn-main" onclick="window.print()">Print Ticket</button>
+                <button class="btn-block btn-main" style="background: #222;" onclick="alert('Downloading...')">Download PDF</button>
+                <button class="btn-block btn-outline" style="grid-column: span 2;" onclick="cancelTicket()">Cancel Ticket</button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showPage('homePage', this)"><i class="fa-solid fa-earth-americas"></i>Travel</div>
+        <div class="nav-item" onclick="showPage('foodPage', this)"><i class="fa-solid fa-burger"></i>Food</div>
+        <div class="nav-item" onclick="showPage('walletPage', this)"><i class="fa-solid fa-wallet"></i>Wallet</div>
+        <div class="nav-item" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i>Menu</div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+    <script>
+        // Data Arrays
+        const places = [
+            { name: "Maldives Luxury", img: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8" },
+            { name: "Paris Romance", img: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34" },
+            { name: "Dubai Gold", img: "https://images.unsplash.com/photo-1512453979798-5ea4e735c464" },
+            { name: "Switzerland Snow", img: "https://images.unsplash.com/photo-1530122037265-a5f1f91d3b99" },
+            { name: "Bali Paradise", img: "https://images.unsplash.com/photo-1537996194471-e657df975ab4" },
+            { name: "Singapore City", img: "https://images.unsplash.com/photo-1525625232717-313620959828" },
+            { name: "London Heritage", img: "https://images.unsplash.com/photo-1513635269975-59663e0ac1ad" },
+            { name: "Tokyo Neon", img: "https://images.unsplash.com/photo-1503899036084-c55cdd92da26" },
+            { name: "New York Times", img: "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9" },
+            { name: "Sydney Opera", img: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9" },
+            { name: "Rome Colosseum", img: "https://images.unsplash.com/photo-1552832230-c0197dd311b5" },
+            { name: "Egypt Pyramids", img: "https://images.unsplash.com/photo-1503177119275-0aa32b3a9368" },
+            { name: "Goa Sunsets", img: "https://images.unsplash.com/photo-1512343879784-a960bf40e7f2" },
+            { name: "Ooty Hills", img: "https://images.unsplash.com/photo-1500463959177-e0869687df26" },
+            { name: "Ladakh Bike Trip", img: "https://images.unsplash.com/photo-1590050752117-23a9d7fc2440" }
+        ];
+
+        const foods = [];
+        const cuisines = ['Indian', 'Italian', 'Chinese', 'USA'];
+        for(let i=1; i<=200; i++) {
+            foods.push({
+                id: i,
+                name: `Deluxe Meal ${i}`,
+                type: cuisines[Math.floor(Math.random() * cuisines.length)],
+                img: `https://loremflickr.com/320/240/food?lock=${i}`
+            });
+        }
+
+        let isLoggedIn = false;
+        let selectedDestination = "";
+        let isSignUp = false;
+
+        // Initialization
+        window.onload = () => {
+            renderPlaces(places);
+            renderFood(foods);
+            const phone = document.querySelector("#pPhone");
+            window.intlTelInput(phone, { initialCountry: "in", separateDialCode: true });
+            document.getElementById('pDate').min = new Date().toISOString().split("T")[0];
+        };
+
+        function renderPlaces(data) {
+            const grid = document.getElementById('destGrid');
+            grid.innerHTML = data.map(p => `
+                <div class="card-3d" onclick="initBook('${p.name}')">
+                    <img src="${p.img}?w=500" class="card-img">
+                    <div class="card-info">
+                        <h3>${p.name}</h3>
+                        <p style="color:var(--primary); font-weight:700;">Start Booking <i class="fa-solid fa-arrow-right"></i></p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderFood(data) {
+            const grid = document.getElementById('foodGrid');
+            grid.innerHTML = data.map(f => `
+                <div class="card-3d">
+                    <img src="${f.img}" class="card-img">
+                    <div class="card-info">
+                        <span style="font-size:10px; background:#eee; padding:3px 8px; border-radius:10px;">${f.type}</span>
+                        <h4 style="margin-top:5px;">${f.name}</h4>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Logic Functions
+        function toggleMenu() { document.getElementById('sideMenu').classList.toggle('active'); }
+        
+        function showPage(pageId, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+            if(el) {
+                document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+                el.classList.add('active');
+            }
+            toggleMenu(); window.scrollTo(0,0);
+        }
+
+        function openLogin() { document.getElementById('loginModal').style.display = 'flex'; }
+        function closeLogin() { document.getElementById('loginModal').style.display = 'none'; }
+
+        function toggleLoginMode() {
+            isSignUp = !isSignUp;
+            document.getElementById('modalTitle').innerText = isSignUp ? "Create Account" : "Login";
+            document.getElementById('modalSub').innerText = isSignUp ? "Join MV Travels for better offers" : "Enter your details to continue";
+            document.getElementById('toggleText').innerText = isSignUp ? "Already have an account? Login" : "Create a new account";
+        }
+
+        function handleLogin() {
+            isLoggedIn = true;
+            alert("Success! Welcome to MV Travels.");
+            closeLogin();
+            document.querySelector('.login-btn').innerText = "Profile";
+        }
+
+        function initBook(name) {
+            if(!isLoggedIn) {
+                alert("Please Login to book tickets!");
+                openLogin();
+            } else {
+                selectedDestination = name;
+                showPage('bookingPage');
+            }
+        }
+
+        function selectMem(el, count) {
+            document.querySelectorAll('.mem-box').forEach(b => b.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+
+        function processBooking() {
+            const name = document.getElementById('pName').value;
+            const date = document.getElementById('pDate').value;
+            if(!date) { alert("Please select a travel date!"); return; }
+
+            // Animation
+            document.getElementById('successAnim').style.display = 'flex';
+            setTimeout(() => {
+                document.getElementById('successAnim').style.display = 'none';
+                document.getElementById('tName').innerText = document.getElementById('pTitle').value + " " + name;
+                document.getElementById('tDest').innerText = selectedDestination;
+                document.getElementById('tDate').innerText = date;
+                document.getElementById('tClass').innerText = document.getElementById('pClass').value;
+                showPage('ticketPage');
+            }, 3000);
+        }
+
+        function cancelTicket() {
+            if(confirm("Confirm Cancel?")) {
+                alert("Ticket Cancelled. Refund of ₹12,000 initiated to your MV Wallet.");
+                showPage('homePage');
+            }
+        }
+
+        function filterFood(type) {
+            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+            const filtered = type === 'All' ? foods : foods.filter(f => f.type === type);
+            renderFood(filtered);
+        }
+
+        function searchPlaces(q) {
+            const query = q.toLowerCase();
+            const filtered = places.filter(p => p.name.toLowerCase().includes(query));
+            renderPlaces(filtered);
+        }
+
+        function handleEnter(e) {
+            if(e.key === "Enter") {
+                const activePage = document.querySelector('.page.active').id;
+                if(activePage === 'bookingPage') processBooking();
+            }
+        }
+    </script>
+</body>
+</html>
